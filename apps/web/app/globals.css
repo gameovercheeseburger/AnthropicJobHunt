@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+/* Design tokens. Colors chosen for WCAG AA contrast in both themes. */
+:root {
+  --background: #f6f5f2;
+  --foreground: #1c1b19;
+  --card: #ffffff;
+  --muted: #6b6760;
+  --border: #e3e0d9;
+  --chip: #f0eee9;
+  --brand: #c2541f;
+  --brand-foreground: #ffffff;
+  --apply: #15803d;
+  --pass: #b91c1c;
+  --save: #1d4ed8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #151413;
+    --foreground: #f2f0eb;
+    --card: #211f1d;
+    --muted: #a8a39a;
+    --border: #3a3733;
+    --chip: #2c2a27;
+    --brand: #e57a45;
+    --brand-foreground: #1c1b19;
+    --apply: #4ade80;
+    --pass: #f87171;
+    --save: #93b4ff;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-chip: var(--chip);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-apply: var(--apply);
+  --color-pass: var(--pass);
+  --color-save: var(--save);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  /* Stop pull-to-refresh and overscroll bounce from fighting swipe gestures. */
+  overscroll-behavior-y: contain;
+}

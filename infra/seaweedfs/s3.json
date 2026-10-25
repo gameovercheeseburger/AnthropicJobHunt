@@ -1,0 +1,9 @@
+{
+  "identities": [
+    {
+      "name": "ajh-local",
+      "credentials": [{ "accessKey": "ajh", "secretKey": "ajh_local_dev" }],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+    }
+  ]
+}
