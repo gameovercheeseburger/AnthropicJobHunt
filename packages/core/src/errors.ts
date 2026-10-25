@@ -10,3 +10,6 @@ export class NotFoundError extends DomainError {
     super(`${entity} not found: ${id}`);
   }
 }
+
+/** Invalid user input. The message is safe to show to the user. */
+export class ValidationError extends DomainError {}

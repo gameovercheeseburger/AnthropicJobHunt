@@ -19,7 +19,8 @@
   "dependencies": {
     "@ajh/core": "*",
     "drizzle-orm": "^0.44.0",
-    "postgres": "^3.4.5"
+    "postgres": "^3.4.5",
+    "@ajh/infra": "*"
   },
   "devDependencies": {
     "dotenv": "^16.4.7",

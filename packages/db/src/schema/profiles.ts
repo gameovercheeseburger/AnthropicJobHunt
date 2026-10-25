@@ -1,4 +1,5 @@
 // Profile and resume data. Fields suffixed `_enc` hold AES-GCM ciphertext (see crypto.ts).
+import type { VerificationWarning } from "@ajh/core";
 import { sql } from "drizzle-orm";
 import {
   boolean,
@@ -83,6 +84,21 @@ export const profileSkills = pgTable(
   (t) => [uniqueIndex("profile_skills_user_name_uq").on(t.userId, sql`lower(${t.name})`)],
 );
 
+export const profileCertifications = pgTable(
+  "profile_certifications",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    issuer: text("issuer"),
+    date: text("date"),
+    sortOrder: integer("sort_order").notNull().default(0),
+  },
+  (t) => [index("profile_certifications_user_idx").on(t.userId)],
+);
+
 export const resumes = pgTable(
   "resumes",
   {
@@ -99,6 +115,8 @@ export const resumes = pgTable(
     parsedJsonEnc: text("parsed_json_enc"),
     parseStatus: parseStatusEnum("parse_status").notNull().default("pending"),
     parseError: text("parse_error"),
+    // Values the truthfulness check could not find in the source resume.
+    warnings: jsonb("warnings").$type<VerificationWarning[]>().notNull().default([]),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [

@@ -9,7 +9,13 @@ loadEnvConfig(path.resolve(process.cwd(), "../.."), process.env.NODE_ENV !== "pr
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
-  transpilePackages: ["@ajh/core", "@ajh/db"],
+  transpilePackages: ["@ajh/core", "@ajh/db", "@ajh/infra", "@ajh/ai", "@ajh/app"],
+  // Native/Node-only libraries stay external to the server bundle.
+  serverExternalPackages: ["mammoth", "unpdf"],
+  experimental: {
+    // Resumes up to 5 MB, plus multipart overhead.
+    serverActions: { bodySizeLimit: "6mb" },
+  },
   turbopack: {
     rules: {
       "*.css": {

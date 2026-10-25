@@ -17,7 +17,7 @@
     "react-dom": "19.3.0",
     "server-only": "^0.0.1",
     "@ajh/core": "*",
-    "@ajh/db": "*"
+    "@ajh/app": "*"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",

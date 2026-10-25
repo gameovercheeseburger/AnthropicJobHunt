@@ -3,6 +3,7 @@
 
 import type { JobCard } from "../domain/job";
 import type { Application, ApplicationStatus, Swipe, SwipeDirection } from "../domain/swipe";
+import type { ProfileRepository, ResumeRepository } from "./resume";
 
 export interface FeedQuery {
   userId: string;
@@ -33,6 +34,8 @@ export interface Repositories {
   jobs: JobRepository;
   swipes: SwipeRepository;
   applications: ApplicationRepository;
+  resumes: ResumeRepository;
+  profiles: ProfileRepository;
 }
 
 /** Unit of Work: runs a use case atomically against transaction-bound repositories. */
