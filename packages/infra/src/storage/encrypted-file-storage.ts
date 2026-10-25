@@ -8,7 +8,7 @@ export class EncryptedFileStorage implements FileStorage {
     private readonly cipher: FieldCipher,
   ) {}
 
-  put(key: string, bytes: Uint8Array): Promise<void> {
+  put(key: string, bytes: Uint8Array, _contentType?: string): Promise<void> {
     // The stored object is ciphertext, so its real content type is opaque.
     return this.inner.put(key, this.cipher.encryptBytes(bytes), "application/octet-stream");
   }
