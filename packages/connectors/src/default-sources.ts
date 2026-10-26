@@ -1,5 +1,31 @@
 import type { SourceKind } from "@ajh/core";
 import type { BoardRef } from "./board-connector";
+import type { JSearchConfig } from "./jsearch";
+
+/**
+ * Google for Jobs searches (via JSearch) covering LinkedIn, Indeed, Glassdoor and Job Bank postings.
+ * Sized for a small RapidAPI plan: 6 requests per daily run ≈ 180/month. Raise `maxRequestsPerRun`
+ * (and add queries) on a bigger plan. The admin can edit these in the `sources` table.
+ */
+export const DEFAULT_JSEARCH_SOURCE: { key: string; name: string; kind: SourceKind; config: JSearchConfig } = {
+  key: "jsearch",
+  name: "Google for Jobs (JSearch: LinkedIn, Indeed, Job Bank, …)",
+  kind: "aggregator",
+  config: {
+    queries: [
+      "software developer jobs in Canada",
+      "data analyst jobs in Canada",
+      "project manager jobs in Canada",
+      "IT support jobs in Canada",
+      "business analyst jobs in Canada",
+      "marketing jobs in Canada",
+    ],
+    country: "ca",
+    datePosted: "3days",
+    pagesPerQuery: 1,
+    maxRequestsPerRun: 6,
+  },
+};
 
 /**
  * Starting set of public career boards with roles located in Canada (verified 2026-10-25).

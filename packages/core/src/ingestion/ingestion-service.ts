@@ -7,6 +7,9 @@ import { jobFingerprint } from "./normalize";
 export type JobFilter = (job: NormalizedJobInput) => boolean;
 export const canadaOnly: JobFilter = (job) => job.country === "CA";
 
+/** Jobs from search-based sources expire after this long without being seen again. */
+export const STALE_AFTER_DAYS = 14;
+
 export interface IngestionServiceDeps {
   sources: SourceRepository;
   ingestion: IngestionRepository;
@@ -28,7 +31,7 @@ export class IngestionService {
   async runAll(): Promise<IngestionReport[]> {
     const reports: IngestionReport[] = [];
     for (const source of await this.deps.sources.listEnabled()) reports.push(await this.runSource(source));
-    await this.deps.ingestion.expireOverdue(this.now());
+    await this.deps.ingestion.expireOverdue(this.now(), STALE_AFTER_DAYS);
     return reports;
   }
 
@@ -62,7 +65,9 @@ export class IngestionService {
             errors.push(`${job.externalId}: ${message(err)}`);
           }
         }
-        counts.expired += await this.deps.ingestion.expireUnseen(source.id, result.scope, startedAt);
+        if (result.complete !== false) {
+          counts.expired += await this.deps.ingestion.expireUnseen(source.id, result.scope, startedAt);
+        }
       }
     } catch (err) {
       errors.push(message(err));

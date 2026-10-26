@@ -1,5 +1,5 @@
 import { FeedService, IngestionService, ResumeService, SwipeService } from "@ajh/core";
-import { createConnectorRegistry, DEFAULT_SOURCES } from "@ajh/connectors";
+import { createConnectorRegistry, DEFAULT_JSEARCH_SOURCE, DEFAULT_SOURCES } from "@ajh/connectors";
 import { ClaudeResumeParser } from "@ajh/ai";
 import {
   createDatabase,
@@ -35,7 +35,7 @@ export function createContainer(config: AppConfig = loadConfig()) {
   const ingestion = new IngestionService({
     sources,
     ingestion: new DrizzleIngestionRepository(db),
-    connectors: createConnectorRegistry(),
+    connectors: createConnectorRegistry({ jsearchApiKey: config.JSEARCH_API_KEY }),
   });
 
   return {
@@ -51,9 +51,11 @@ export function createContainer(config: AppConfig = loadConfig()) {
     /** Refreshes jobs from every enabled source (CLI and scheduled cron). */
     ingestion: {
       async runAll() {
-        await sources.ensureDefaults(
-          DEFAULT_SOURCES.map(({ key, name, kind, boards }) => ({ key, name, kind, config: { boards } })),
-        );
+        await sources.ensureDefaults([
+          ...DEFAULT_SOURCES.map(({ key, name, kind, boards }) => ({ key, name, kind, config: { boards } })),
+          // Only offered once a key is configured, so runs without a key stay error-free.
+          ...(config.JSEARCH_API_KEY ? [{ ...DEFAULT_JSEARCH_SOURCE, config: { ...DEFAULT_JSEARCH_SOURCE.config } }] : []),
+        ]);
         return ingestion.runAll();
       },
     },

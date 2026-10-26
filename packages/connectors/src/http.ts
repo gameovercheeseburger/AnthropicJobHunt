@@ -18,6 +18,8 @@ export interface FetchHttpClientOptions {
   minIntervalMs?: number;
   timeoutMs?: number;
   retries?: number;
+  /** Extra headers for every request (e.g. an API key). */
+  headers?: Record<string, string>;
   fetchImpl?: typeof fetch;
 }
 
@@ -31,6 +33,7 @@ export class FetchHttpClient implements HttpClient {
       minIntervalMs: options.minIntervalMs ?? 250,
       timeoutMs: options.timeoutMs ?? 20_000,
       retries: options.retries ?? 2,
+      headers: options.headers ?? {},
       fetchImpl: options.fetchImpl ?? fetch,
     };
   }
@@ -41,7 +44,7 @@ export class FetchHttpClient implements HttpClient {
       let res: Response;
       try {
         res = await this.opts.fetchImpl(url, {
-          headers: { Accept: "application/json", "User-Agent": USER_AGENT },
+          headers: { Accept: "application/json", "User-Agent": USER_AGENT, ...this.opts.headers },
           signal: AbortSignal.timeout(this.opts.timeoutMs),
         });
       } catch (err) {

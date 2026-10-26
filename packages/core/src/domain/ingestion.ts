@@ -31,7 +31,16 @@ export interface NormalizedJobInput {
  * Failures are per scope, so one broken board never expires another board's jobs.
  */
 export type ScopeResult =
-  | { scope: string; ok: true; jobs: NormalizedJobInput[] }
+  | {
+      scope: string;
+      ok: true;
+      jobs: NormalizedJobInput[];
+      /**
+       * True (default) when the scope returned its full inventory, so absent jobs are gone.
+       * Search-based sources return a sample and set this to false.
+       */
+      complete?: boolean;
+    }
   | { scope: string; ok: false; error: string };
 
 export interface SourceDefinition {

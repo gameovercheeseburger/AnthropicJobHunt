@@ -23,6 +23,14 @@ Never commit them. The GitHub repo is public.
 4. Your **Account ID** is on the R2 overview page: set
    `S3_ENDPOINT=https://<ACCOUNT_ID>.r2.cloudflarestorage.com`.
 
+## 2b. JSearch (Google for Jobs: LinkedIn, Indeed, Job Bank listings), optional
+
+1. Sign up at https://rapidapi.com and open the **JSearch** API (by OpenWeb Ninja) → **Pricing** →
+   subscribe to the free/basic plan.
+2. Copy your **X-RapidAPI-Key** into `JSEARCH_API_KEY`.
+3. The default searches use 6 requests per daily run (~180/month). If your plan allows more, raise
+   `maxRequestsPerRun` and add queries in the `jsearch` row of the `sources` table.
+
 ## 3. Fill in `.env.production.local`
 
 Also set `ANTHROPIC_API_KEY`, `ADMIN_USERNAME`, and `ADMIN_PASSWORD`.

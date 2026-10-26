@@ -177,6 +177,13 @@ describe("IngestionService", () => {
     expect(repo.runs[0]!.error).toContain("HTTP 503");
   });
 
+  it("does not expire jobs from partial (search-based) results", async () => {
+    const { svc, repo } = service([{ scope: "q-dev", ok: true, jobs: [job("jsearch:1")], complete: false }]);
+    await svc.runAll();
+    expect(repo.expiredScopes).toEqual([]);
+    expect(repo.stored.has("jsearch:1")).toBe(true);
+  });
+
   it("records a run even when the connector throws", async () => {
     const repo = new FakeIngestionRepo();
     const svc = new IngestionService({

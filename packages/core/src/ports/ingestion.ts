@@ -28,6 +28,6 @@ export interface IngestionRepository {
    * Returns the number of jobs expired.
    */
   expireUnseen(sourceId: string, scope: string, since: Date): Promise<number>;
-  /** Expires jobs whose own deadline has passed. */
-  expireOverdue(now: Date): Promise<number>;
+  /** Expires jobs past their deadline, and jobs no source has seen for `staleAfterDays`. */
+  expireOverdue(now: Date, staleAfterDays: number): Promise<number>;
 }

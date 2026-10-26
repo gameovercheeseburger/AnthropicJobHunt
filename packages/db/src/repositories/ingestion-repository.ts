@@ -124,12 +124,22 @@ export class DrizzleIngestionRepository implements IngestionRepository {
     return expired.length;
   }
 
-  async expireOverdue(now: Date): Promise<number> {
-    const rows = await this.db
+  async expireOverdue(now: Date, staleAfterDays: number): Promise<number> {
+    const overdue = await this.db
       .update(jobs)
       .set({ status: "expired", updatedAt: sql`now()` })
       .where(and(eq(jobs.status, "active"), lt(jobs.expiresAt, now)))
       .returning({ id: jobs.id });
-    return rows.length;
+
+    const staleBefore = new Date(now.getTime() - staleAfterDays * 86_400_000).toISOString();
+    const stale = await this.db.execute<{ id: string }>(sql`
+      update ${jobs} set status = 'expired', updated_at = now()
+      where ${jobs.status} = 'active'
+        and not exists (
+          select 1 from ${jobListings} l
+          where l.job_id = ${jobs.id} and l.last_seen_at >= ${staleBefore}::timestamptz
+        )
+      returning ${jobs.id}`);
+    return overdue.length + stale.length;
   }
 }
