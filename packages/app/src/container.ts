@@ -9,7 +9,7 @@ import { loadConfig, type AppConfig } from "./config";
  * Shared by the web app, the background worker, and scripts.
  */
 export function createContainer(config: AppConfig = loadConfig()) {
-  const db = createDatabase(config.DATABASE_URL);
+  const db = createDatabase(config.DATABASE_URL, { serverless: Boolean(process.env.VERCEL) });
   const cipher = new FieldCipher(config.DATA_ENCRYPTION_KEY);
   const repos = createRepositories(db, cipher);
   const uow = new DrizzleUnitOfWork(db, cipher);

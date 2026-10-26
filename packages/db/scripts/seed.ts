@@ -5,7 +5,8 @@ import { createDatabase } from "../src/client";
 import { inArray } from "drizzle-orm";
 import { companies, jobListings, jobs, sources, users } from "../src/schema";
 
-config({ path: "../../.env" });
+// ENV_FILE lets the same script target production, e.g. ENV_FILE=../../.env.production.local
+config({ path: process.env.ENV_FILE ?? "../../.env" });
 
 export const DEV_USER_ID = "dev-user";
 
@@ -36,7 +37,7 @@ const SEED_JOBS: SeedJob[] = [
 
 const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
-const db = createDatabase(process.env.DATABASE_URL!);
+const db = createDatabase(process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL!);
 
 await db
   .insert(users)

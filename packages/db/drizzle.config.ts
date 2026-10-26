@@ -1,7 +1,8 @@
 import { config } from "dotenv";
 import { defineConfig } from "drizzle-kit";
 
-config({ path: "../../.env" });
+// ENV_FILE lets the same script target production, e.g. ENV_FILE=../../.env.production.local
+config({ path: process.env.ENV_FILE ?? "../../.env" });
 
 export default defineConfig({
   dialect: "postgresql",

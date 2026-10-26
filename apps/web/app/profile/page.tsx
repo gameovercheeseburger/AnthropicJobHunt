@@ -8,6 +8,9 @@ import { requireUserId } from "@/lib/current-user";
 
 export const metadata: Metadata = { title: "Profile" };
 
+// Resume parsing can take up to a minute; give the upload action room on Vercel.
+export const maxDuration = 120;
+
 export default function ProfilePage() {
   return (
     <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-5 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-28">

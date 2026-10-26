@@ -12,6 +12,7 @@ const ITEMS = [
 /** Mobile-style bottom tab bar. */
 export function AppNav() {
   const pathname = usePathname();
+  if (pathname.startsWith("/unlock")) return null;
   return (
     <nav
       aria-label="Main"

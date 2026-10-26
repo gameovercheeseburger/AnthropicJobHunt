@@ -2,8 +2,17 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
 
-export function createDatabase(url: string) {
-  const client = postgres(url, { max: 10 });
+export interface DatabaseOptions {
+  /** Serverless hosts (Vercel) run many short-lived instances: keep each pool tiny. */
+  serverless?: boolean;
+}
+
+export function createDatabase(url: string, options: DatabaseOptions = {}) {
+  const client = postgres(url, {
+    max: options.serverless ? 3 : 10,
+    // Pooled endpoints (e.g. Neon "-pooler" hosts, PgBouncer) don't support prepared statements.
+    prepare: !/-pooler\.|pgbouncer=true/.test(url),
+  });
   return drizzle(client, { schema, casing: "snake_case" });
 }
 
