@@ -16,6 +16,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except the unlock page itself, Next.js assets, and the PWA icon/manifest.
-  matcher: ["/((?!unlock|_next/static|_next/image|icon.svg|manifest.webmanifest|robots.txt).*)"],
+  // Everything except the sign-in page, Next.js assets, the PWA icon/manifest, and the cron
+  // endpoint (which checks its own CRON_SECRET).
+  matcher: ["/((?!unlock|api/cron|_next/static|_next/image|icon.svg|manifest.webmanifest|robots.txt).*)"],
 };

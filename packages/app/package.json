@@ -10,14 +10,16 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "resume:upload": "tsx scripts/upload-resume.ts"
+    "resume:upload": "tsx scripts/upload-resume.ts",
+    "ingest": "tsx scripts/ingest.ts"
   },
   "dependencies": {
     "@ajh/core": "*",
     "zod": "^4.6.7",
     "@ajh/ai": "*",
     "@ajh/db": "*",
-    "@ajh/infra": "*"
+    "@ajh/infra": "*",
+    "@ajh/connectors": "*"
   },
   "devDependencies": {
     "dotenv": "^16.4.7",

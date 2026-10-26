@@ -2,9 +2,11 @@ import type { Repositories, UnitOfWork } from "@ajh/core";
 import type { FieldCipher } from "@ajh/infra";
 import type { Database, Executor } from "../client";
 import { DrizzleApplicationRepository } from "./application-repository";
+import { DrizzleIngestionRepository } from "./ingestion-repository";
 import { DrizzleJobRepository } from "./job-repository";
 import { DrizzleProfileRepository } from "./profile-repository";
 import { DrizzleResumeRepository } from "./resume-repository";
+import { DrizzleSourceRepository } from "./source-repository";
 import { DrizzleSwipeRepository } from "./swipe-repository";
 
 /** Factory: the full set of repositories bound to one executor (pool or transaction). */
@@ -31,6 +33,8 @@ export class DrizzleUnitOfWork implements UnitOfWork {
 
 export {
   DrizzleApplicationRepository,
+  DrizzleIngestionRepository,
+  DrizzleSourceRepository,
   DrizzleJobRepository,
   DrizzleProfileRepository,
   DrizzleResumeRepository,

@@ -1,6 +1,13 @@
-import { FeedService, ResumeService, SwipeService } from "@ajh/core";
+import { FeedService, IngestionService, ResumeService, SwipeService } from "@ajh/core";
+import { createConnectorRegistry, DEFAULT_SOURCES } from "@ajh/connectors";
 import { ClaudeResumeParser } from "@ajh/ai";
-import { createDatabase, createRepositories, DrizzleUnitOfWork } from "@ajh/db";
+import {
+  createDatabase,
+  createRepositories,
+  DrizzleIngestionRepository,
+  DrizzleSourceRepository,
+  DrizzleUnitOfWork,
+} from "@ajh/db";
 import { defaultTextExtractors, EncryptedFileStorage, FieldCipher, S3FileStorage } from "@ajh/infra";
 import { loadConfig, type AppConfig } from "./config";
 
@@ -24,6 +31,13 @@ export function createContainer(config: AppConfig = loadConfig()) {
     cipher,
   );
 
+  const sources = new DrizzleSourceRepository(db);
+  const ingestion = new IngestionService({
+    sources,
+    ingestion: new DrizzleIngestionRepository(db),
+    connectors: createConnectorRegistry(),
+  });
+
   return {
     feed: new FeedService(repos.jobs),
     swipes: new SwipeService(uow),
@@ -34,6 +48,15 @@ export function createContainer(config: AppConfig = loadConfig()) {
       extractors: defaultTextExtractors(),
       parser: new ClaudeResumeParser(), // reads ANTHROPIC_API_KEY from the environment
     }),
+    /** Refreshes jobs from every enabled source (CLI and scheduled cron). */
+    ingestion: {
+      async runAll() {
+        await sources.ensureDefaults(
+          DEFAULT_SOURCES.map(({ key, name, kind, boards }) => ({ key, name, kind, config: { boards } })),
+        );
+        return ingestion.runAll();
+      },
+    },
     /** Closes the database pool (scripts and tests). */
     dispose: () => db.$client.end(),
   };

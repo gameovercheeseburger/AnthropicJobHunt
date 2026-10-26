@@ -20,7 +20,8 @@
     "setup": "npm run services:up && npm run db:migrate && npm run db:seed",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "vitest run",
-    "resume:upload": "npm run resume:upload -w @ajh/app --"
+    "resume:upload": "npm run resume:upload -w @ajh/app --",
+    "ingest": "npm run ingest -w @ajh/app"
   },
   "devDependencies": {
     "typescript": "^5",

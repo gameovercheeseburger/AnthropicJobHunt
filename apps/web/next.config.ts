@@ -9,7 +9,7 @@ loadEnvConfig(path.resolve(process.cwd(), "../.."), process.env.NODE_ENV !== "pr
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
-  transpilePackages: ["@ajh/core", "@ajh/db", "@ajh/infra", "@ajh/ai", "@ajh/app"],
+  transpilePackages: ["@ajh/core", "@ajh/db", "@ajh/infra", "@ajh/ai", "@ajh/app", "@ajh/connectors"],
   // Native/Node-only libraries stay external to the server bundle.
   serverExternalPackages: ["mammoth", "unpdf"],
   experimental: {

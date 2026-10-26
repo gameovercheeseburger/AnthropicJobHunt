@@ -1,0 +1,108 @@
+{
+ "jobs": [
+  {
+   "id": "ca4434c0-9935-40aa-8bf9-5caaf0f2ce1b",
+   "title": "Lead, Workplace Operations",
+   "department": "People Operations & Communications",
+   "team": "People Operations",
+   "employmentType": "FullTime",
+   "location": "Toronto Headquarters",
+   "shouldDisplayCompensationOnJobPostings": true,
+   "secondaryLocations": [],
+   "publishedAt": "2026-09-11T17:27:53.395+00:00",
+   "isListed": true,
+   "isRemote": false,
+   "workplaceType": "OnSite",
+   "address": {
+    "postalAddress": {
+     "addressRegion": "Ontario",
+     "addressCountry": "Canada",
+     "addressLocality": "Toronto"
+    }
+   },
+   "jobUrl": "https://jobs.ashbyhq.com/wealthsimple/ca4434c0-9935-40aa-8bf9-5caaf0f2ce1b",
+   "applyUrl": "https://jobs.ashbyhq.com/wealthsimple/ca4434c0-9935-40aa-8bf9-5caaf0f2ce1b/application",
+   "descriptionHtml": "<h2><strong>Build something people love</strong></h2><p style=\"min-height:1.5em\">Wealthsimple is Canada’s leading financial innovator. The company offers a full suite of simple, sophisticated financial products across managed investing, do-it-yourself trading, cryptocurrency, tax filing, spending and saving. Wealthsimple currently serves more than 4 million Canadians and holds over $155 billion in assets under administration. The company was founded in 2014 by a team of financial experts and technology entrepreneurs, and is headquartered in Toronto, Canada.</p><p style=\"min-height:1.5em\"></p><p style=\"min-height:1.5em\">We're proud of what we've built — and we're just getting started. Read our <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.wealthsimple.com/en-ca/culture\"><u>Culture Manual</u></a> and learn more about <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.wealthsimple.com/en-ca/careers\"><u>how we work</u></a>.</p><p style=\"min-height:1.5em\"></p><h1><strong>About the Team</strong></h1><p style=\"min-height:1.5em\">Great work happens in spaces designed for it. Wealthsimple's Workplace Operations team is responsible for delivering safe, functional, and welcoming environments for our people. We believe in unreasonable hospitality - going beyond what's expected, in ways big and small, to remove friction and create space for people to focus on what matters. As part of the team, you'll help shape how our office experience scales",
+   "descriptionPlain": "BUILD SOMETHING PEOPLE LOVE\n\nWealthsimple is Canada’s leading financial innovator. The company offers a full suite of simple, sophisticated financial products across managed investing, do-it-yourself trading, cryptocurrency, tax filing, spending and saving. Wealthsimple currently serves more than 4 million Canadians and holds over $155 billion in assets under administration. The company was founded in 2014 by a team of financial experts and technology entrepreneurs, and is headquartered in Toronto, Canada.\n\n\n\nWe're proud of what we've built — and we're just getting started. Read our Culture Manual https://www.wealthsimple.com/en-ca/culture and learn more about how we work https://www.wealthsimple.com/en-ca/careers.\n\n\n\n\nABOUT THE TEAM\n\nGreat work happens in spaces designed for it. Wealthsimple's Workplace Operations team is responsible for delivering safe, functional, and welcoming environments for our people. We believe in unreasonable hospitality - going beyond what's expected, in ways big and small, to remove friction and create space for people to focus on what matters. As part of the team, you'll help shape how our office experience scales, creating a best-in-class workplace that enables our employees to do their best work and helps drive the business forward.\n\n\n\n\n\nABOUT THE ROLE\n\nAs Lead, Workplace Operations, you own the experience of the physical workplace itself: the systems, facilities, F&B, and workplace safety that every Wealthsimpler relies on, across every hub in",
+   "compensation": {
+    "compensationTierSummary": "CA$116K – CA$145K • Offers Equity",
+    "scrapeableCompensationSalarySummary": "CA$116K - CA$145K",
+    "compensationTiers": [
+     {
+      "id": "88bbefb1-5555-4171-912d-6d20992f9013",
+      "tierSummary": "CA$116K – CA$145K • Offers Equity",
+      "title": null,
+      "additionalInformation": null,
+      "components": [
+       {
+        "id": "76f3a7e1-2d78-4950-865c-73acc581ff01",
+        "summary": "CA$116K – CA$145K",
+        "compensationType": "Salary",
+        "interval": "1 YEAR",
+        "currencyCode": "CAD",
+        "minValue": 116000,
+        "maxValue": 145000
+       },
+       {
+        "id": "002d8fbb-bb25-47bc-80b2-d20564bbb95d",
+        "summary": "Offers Equity",
+        "compensationType": "EquityCashValue",
+        "interval": "1 YEAR",
+        "currencyCode": "CAD",
+        "minValue": null,
+        "maxValue": null
+       }
+      ]
+     }
+    ],
+    "summaryComponents": [
+     {
+      "compensationType": "Salary",
+      "interval": "1 YEAR",
+      "currencyCode": "CAD",
+      "minValue": 116000,
+      "maxValue": 145000
+     },
+     {
+      "compensationType": "EquityCashValue",
+      "interval": "1 YEAR",
+      "currencyCode": "CAD",
+      "minValue": null,
+      "maxValue": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "93453282-d95c-42a3-87e4-b13df7d9ec03",
+   "title": "Future Opportunities - North Star: Calling all Canadians Abroad",
+   "department": "General",
+   "team": "Future Opportunities",
+   "employmentType": "FullTime",
+   "location": "Remote (Canada)",
+   "shouldDisplayCompensationOnJobPostings": false,
+   "secondaryLocations": [],
+   "publishedAt": "2026-02-14T17:27:16.004+00:00",
+   "isListed": true,
+   "isRemote": true,
+   "workplaceType": "Remote",
+   "address": {
+    "postalAddress": {
+     "addressRegion": "",
+     "addressCountry": "Canada",
+     "addressLocality": ""
+    }
+   },
+   "jobUrl": "https://jobs.ashbyhq.com/wealthsimple/93453282-d95c-42a3-87e4-b13df7d9ec03",
+   "applyUrl": "https://jobs.ashbyhq.com/wealthsimple/93453282-d95c-42a3-87e4-b13df7d9ec03/application",
+   "descriptionHtml": "<h2><strong>Build something people love</strong></h2><p style=\"min-height:1.5em\">Wealthsimple is Canada’s leading financial innovator. The company offers a full suite of simple, sophisticated financial products across managed investing, do-it-yourself trading, cryptocurrency, tax filing, spending and saving. Wealthsimple currently serves more than 4 million Canadians and holds over $155 billion in assets under administration. The company was founded in 2014 by a team of financial experts and technology entrepreneurs, and is headquartered in Toronto, Canada.</p><p style=\"min-height:1.5em\"></p><p style=\"min-height:1.5em\">We're proud of what we've built — and we're just getting started. Read our <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.wealthsimple.com/en-ca/culture\"><u>Culture Manual</u></a> and learn more about <a target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"https://www.wealthsimple.com/en-ca/careers\"><u>how we work</u></a>.</p><p style=\"min-height:1.5em\"></p><h2><strong>Hey Canadian leaders abroad…it’s time</strong></h2><p style=\"min-height:1.5em\">You’ve built remarkable things. Led AI teams in San Francisco, scaled fintechs in New York, designed next-gen platforms in Boston. But what if the next big thing isn’t there - it’s here? At Wealthsimple, we’re on a mission to help millions of people achieve financial freedom through simple, powerful, and accessible tools. We're building one of the most ambitious and meaningful tech companie",
+   "descriptionPlain": "BUILD SOMETHING PEOPLE LOVE\n\nWealthsimple is Canada’s leading financial innovator. The company offers a full suite of simple, sophisticated financial products across managed investing, do-it-yourself trading, cryptocurrency, tax filing, spending and saving. Wealthsimple currently serves more than 4 million Canadians and holds over $155 billion in assets under administration. The company was founded in 2014 by a team of financial experts and technology entrepreneurs, and is headquartered in Toronto, Canada.\n\n\n\nWe're proud of what we've built — and we're just getting started. Read our Culture Manual https://www.wealthsimple.com/en-ca/culture and learn more about how we work https://www.wealthsimple.com/en-ca/careers.\n\n\n\n\nHEY CANADIAN LEADERS ABROAD…IT’S TIME\n\nYou’ve built remarkable things. Led AI teams in San Francisco, scaled fintechs in New York, designed next-gen platforms in Boston. But what if the next big thing isn’t there - it’s here? At Wealthsimple, we’re on a mission to help millions of people achieve financial freedom through simple, powerful, and accessible tools. We're building one of the most ambitious and meaningful tech companies in Canada, and we’re looking for world-class Canadian talent to come home and help us build what’s next.\n\n\n\n\nCHANGE THE GAME, FOR CANADA\n\nCanada has urgent problems to solve, and real momentum. The work is complex, the scale is real and the impact will be felt by millions of people everyday - your family members, friends, and even your",
+   "compensation": {
+    "compensationTierSummary": null,
+    "scrapeableCompensationSalarySummary": null,
+    "compensationTiers": [],
+    "summaryComponents": []
+   }
+  }
+ ]
+}

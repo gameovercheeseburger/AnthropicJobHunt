@@ -29,14 +29,18 @@ Also set `ANTHROPIC_API_KEY`, `ADMIN_USERNAME`, and `ADMIN_PASSWORD`.
 `DATA_ENCRYPTION_KEY` and `AUTH_SECRET` were generated for you. **Back up `DATA_ENCRYPTION_KEY`**:
 losing it makes stored resumes unreadable.
 
-## 4. Create the production tables
+## 4. Create the production tables and load jobs
 
 ```bash
 ENV_FILE=../../.env.production.local npm run db:migrate
 ENV_FILE=../../.env.production.local npm run db:seed
+ENV_FILE=../../.env.production.local npm run ingest
 ```
 
-(The seed adds the Super Admin account and sample Canadian jobs until real job sources are connected.)
+The seed creates the Super Admin account. `ingest` loads real jobs located in Canada from the
+public Greenhouse, Lever and Ashby boards in `packages/connectors/src/default-sources.ts`.
+After deployment, Vercel Cron refreshes them daily (`apps/web/vercel.json`) by calling
+`/api/cron/ingest` with `CRON_SECRET`, which was generated for you in `.env.production.local`.
 
 ## 5. Put the code on GitHub
 
