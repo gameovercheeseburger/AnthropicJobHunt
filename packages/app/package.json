@@ -9,7 +9,8 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "resume:upload": "tsx scripts/upload-resume.ts"
   },
   "dependencies": {
     "@ajh/core": "*",
@@ -17,5 +18,9 @@
     "@ajh/ai": "*",
     "@ajh/db": "*",
     "@ajh/infra": "*"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7",
+    "tsx": "^4.19.2"
   }
 }

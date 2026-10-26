@@ -7,7 +7,7 @@ import { presentJobCard } from "@/lib/presenters/job-card";
 
 export default function DiscoverPage() {
   return (
-    <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-4 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+    <main className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-4 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-24">
       <header className="flex items-center justify-between">
         <h1 className="text-lg font-bold tracking-tight">
           AnthropicJob<span className="text-brand">Hunt</span>
