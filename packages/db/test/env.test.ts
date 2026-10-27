@@ -16,3 +16,21 @@ describe("resolveDatabaseUrls", () => {
     expect(resolveDatabaseUrls({})).toEqual({ pooled: null, direct: null });
   });
 });
+
+import { toDriverUrl } from "../src/client";
+
+describe("toDriverUrl", () => {
+  // Placeholder credentials only.
+  const neon = "postgresql://user:secret@ep-example-pooler.us-east-2.aws.neon.tech/db?sslmode=require&channel_binding=require";
+
+  it("drops libpq-only options the driver would send to the server", () => {
+    const url = new URL(toDriverUrl(neon));
+    expect(url.searchParams.has("channel_binding")).toBe(false);
+    expect(url.searchParams.get("sslmode")).toBe("require"); // TLS stays required
+    expect(url.hostname).toContain("-pooler");
+  });
+
+  it("leaves other URLs unchanged", () => {
+    expect(toDriverUrl("postgres://a:b@localhost:5433/ajh")).toBe("postgres://a:b@localhost:5433/ajh");
+  });
+});

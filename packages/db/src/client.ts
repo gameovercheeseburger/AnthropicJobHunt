@@ -7,7 +7,25 @@ export interface DatabaseOptions {
   serverless?: boolean;
 }
 
-export function createDatabase(url: string, options: DatabaseOptions = {}) {
+/**
+ * libpq-only URL options that postgres.js would otherwise forward to the server as startup
+ * parameters, which Postgres rejects ("unrecognized configuration parameter"). Neon adds
+ * `channel_binding=require` to its connection strings by default.
+ */
+const LIBPQ_ONLY_PARAMS = ["channel_binding", "gssencmode", "sslcompression"];
+
+export function toDriverUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    LIBPQ_ONLY_PARAMS.forEach((p) => parsed.searchParams.delete(p));
+    return parsed.toString();
+  } catch {
+    return url; // not a URL (e.g. unusual local DSN): pass through unchanged
+  }
+}
+
+export function createDatabase(rawUrl: string, options: DatabaseOptions = {}) {
+  const url = toDriverUrl(rawUrl);
   const client = postgres(url, {
     max: options.serverless ? 3 : 10,
     // Pooled endpoints (e.g. Neon "-pooler" hosts, PgBouncer) don't support prepared statements.
