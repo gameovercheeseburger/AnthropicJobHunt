@@ -1,71 +1,53 @@
 # Deploying AnthropicJobHunt (private beta)
 
-Stack: **Vercel** (website) + **Neon** (Postgres with pgvector) + **Cloudflare R2** (encrypted resume files).
+Stack: **Vercel** (website) + **Neon** (Postgres) + **Cloudflare R2** (encrypted resume files, capped at 8 GB).
 The whole site sits behind a Super Admin sign-in until user accounts ship.
 
-Secrets live only in `.env.production.local` (git-ignored) and in Vercel's environment settings.
-Never commit them. The GitHub repo is public.
+Every secret goes **only into Vercel's Environment Variables**. Nothing secret is committed; the repo is public.
+Each production deploy applies database migrations and creates the Super Admin account automatically
+(`vercel-build` → `packages/db/scripts/release.ts`). Preview deploys never touch the database.
 
-## 1. Neon (database)
+## 1. Vercel project
 
-1. Sign up at https://neon.tech and create a project. Pick the region closest to Canada
-   (e.g. AWS `us-east-2` / `ca-central-1` if offered) and Postgres 17.
-2. **Connect** → copy the **pooled** connection string (host contains `-pooler`) into
-   `DATABASE_URL`, and the **direct** one (no `-pooler`) into `DATABASE_URL_UNPOOLED`.
+1. Sign in at https://vercel.com with GitHub (account `gameovercheeseburger`).
+2. **Add New… → Project → Import** `gameovercheeseburger/AnthropicJobHunt`.
+3. **Root Directory:** click *Edit* and choose `apps/web`. Framework: Next.js (auto-detected).
+4. Don't deploy yet: first add the environment variables below (expand **Environment Variables** on the
+   import screen, or add them later under **Settings → Environment Variables** and redeploy).
 
-## 2. Cloudflare R2 (file storage)
+## 2. Database: connect Neon (adds the variables for you)
 
-1. Sign up at https://dash.cloudflare.com → **R2 Object Storage** (free tier needs a card on file;
-   10 GB free).
-2. **Create bucket** named `anthropic-job-hunt-resumes` (location: automatic / North America).
-3. **Manage R2 API Tokens → Create API token** with *Object Read & Write*, limited to that bucket.
-   Copy **Access Key ID** → `S3_ACCESS_KEY_ID`, **Secret Access Key** → `S3_SECRET_ACCESS_KEY`.
-4. Your **Account ID** is on the R2 overview page: set
-   `S3_ENDPOINT=https://<ACCOUNT_ID>.r2.cloudflarestorage.com`.
+In the Vercel project: **Storage → Connect Database → Neon** → choose your existing Neon project
+(or **Settings → Integrations → Neon**). This adds `DATABASE_URL` (pooled) and `DATABASE_URL_UNPOOLED`
+(direct) automatically. Doing it by hand instead: copy both strings from Neon → **Connect** with
+pooling on / off.
 
-## 2b. JSearch (Google for Jobs: LinkedIn, Indeed, Job Bank listings), optional
+## 3. Environment variables to add
 
-1. Sign up at https://rapidapi.com and open the **JSearch** API (by OpenWeb Ninja) → **Pricing** →
-   subscribe to the free/basic plan.
-2. Copy your **X-RapidAPI-Key** into `JSEARCH_API_KEY`.
-3. The default searches use 6 requests per daily run (~180/month). If your plan allows more, raise
-   `maxRequestsPerRun` and add queries in the `jsearch` row of the `sources` table.
+| Name | Value |
+|---|---|
+| `S3_ENDPOINT` | `https://<R2 account id>.r2.cloudflarestorage.com` |
+| `S3_REGION` | `auto` |
+| `S3_BUCKET` | `anthropic-job-hunt-resumes` (must match your R2 bucket) |
+| `S3_ACCESS_KEY_ID` | R2 API token → Access Key ID |
+| `S3_SECRET_ACCESS_KEY` | R2 API token → Secret Access Key |
+| `ANTHROPIC_API_KEY` | console.anthropic.com → API Keys |
+| `ADMIN_USERNAME` | your choice |
+| `ADMIN_PASSWORD` | your choice (a strong, new one) |
+| `DATA_ENCRYPTION_KEY` | copy from `.env.production.local` (pre-generated). **Back it up**: losing it makes stored resumes unreadable |
+| `AUTH_SECRET` | copy from `.env.production.local` (pre-generated) |
+| `CRON_SECRET` | copy from `.env.production.local` (pre-generated) |
+| `STORAGE_LIMIT_GB` | `8` |
+| `JSEARCH_API_KEY` | optional: RapidAPI → JSearch (adds LinkedIn / Indeed / Job Bank listings) |
 
-## 3. Fill in `.env.production.local`
+## 4. Deploy
 
-Also set `ANTHROPIC_API_KEY`, `ADMIN_USERNAME`, and `ADMIN_PASSWORD`.
-`DATA_ENCRYPTION_KEY` and `AUTH_SECRET` were generated for you. **Back up `DATA_ENCRYPTION_KEY`**:
-losing it makes stored resumes unreadable.
-
-## 4. Create the production tables and load jobs
-
-```bash
-ENV_FILE=../../.env.production.local npm run db:migrate
-ENV_FILE=../../.env.production.local npm run db:seed
-ENV_FILE=../../.env.production.local npm run ingest
-```
-
-The seed creates the Super Admin account. `ingest` loads real jobs located in Canada from the
-public Greenhouse, Lever and Ashby boards in `packages/connectors/src/default-sources.ts`.
-After deployment, Vercel Cron refreshes them daily (`apps/web/vercel.json`) by calling
-`/api/cron/ingest` with `CRON_SECRET`, which was generated for you in `.env.production.local`.
-
-## 5. Put the code on GitHub
-
-Use **GitHub Desktop** (https://desktop.github.com): sign in as `gameovercheeseburger`,
-**File → Add local repository** → this project folder → **Publish/Push** to
-`gameovercheeseburger/AnthropicJobHunt`. After that, every push redeploys automatically.
-
-## 6. Vercel
-
-1. Sign up at https://vercel.com with GitHub.
-2. **Add New → Project → Import** `gameovercheeseburger/AnthropicJobHunt`.
-3. **Root Directory:** `apps/web` (framework: Next.js, detected automatically).
-4. **Environment Variables:** paste the full contents of `.env.production.local`
-   (`DATABASE_URL_UNPOOLED` can be left out; it is only used for migrations).
-5. **Deploy.** Open the URL and sign in with your admin username and password.
+Click **Deploy**. The build log shows `[release] Applying database migrations…` then the Next.js build.
+When it finishes, open the URL (e.g. `https://anthropic-job-hunt.vercel.app`), sign in with your admin
+username and password, go to **Profile → Refresh jobs now** to load jobs immediately (it then runs daily),
+and upload your resume.
 
 ## Updating
 
-Push to `main` (GitHub Desktop → Commit → Push). If a change adds a migration, run step 4's
-`db:migrate` command before or right after the push.
+Push to `main` and Vercel redeploys automatically, migrations included.
+`npm run storage:check` (with `ENV_FILE` pointing at production settings) shows R2 usage against the cap.

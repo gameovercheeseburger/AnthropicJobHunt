@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { ProfileView } from "@/components/profile/profile-view";
+import { RefreshJobsButton } from "@/components/profile/refresh-jobs-button";
 import { ResumeUploadForm } from "@/components/profile/resume-upload-form";
 import { container } from "@/lib/container";
 import { requireUserId } from "@/lib/current-user";
 
 export const metadata: Metadata = { title: "Profile" };
 
-// Resume parsing can take up to a minute; give the upload action room on Vercel.
-export const maxDuration = 120;
+// Resume parsing (~1 min) and the admin job refresh (~1 min) both run as actions on this page.
+export const maxDuration = 300;
 
 export default function ProfilePage() {
   return (
@@ -43,6 +44,7 @@ async function ProfileContent() {
           Upload your resume to build your profile. It powers job matching and tailored resumes.
         </p>
       )}
+      <RefreshJobsButton />
     </>
   );
 }
