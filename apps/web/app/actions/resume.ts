@@ -1,6 +1,6 @@
 "use server";
 
-import { ValidationError, type VerificationWarning } from "@ajh/core";
+import { DomainError, type VerificationWarning } from "@ajh/core";
 import { refresh } from "next/cache";
 import { container } from "@/lib/container";
 import { requireUserId } from "@/lib/current-user";
@@ -27,7 +27,8 @@ export async function uploadResumeAction(_prev: UploadState, formData: FormData)
       ? { status: "parsed", warnings: result.warnings }
       : { status: "error", message: result.error };
   } catch (err) {
-    if (err instanceof ValidationError) return { status: "error", message: err.message };
+    // Validation and "storage full" errors carry user-safe messages.
+    if (err instanceof DomainError) return { status: "error", message: err.message };
     console.error("uploadResumeAction failed", err);
     return { status: "error", message: "Upload failed. Please try again." };
   }

@@ -21,7 +21,8 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "vitest run",
     "resume:upload": "npm run resume:upload -w @ajh/app --",
-    "ingest": "npm run ingest -w @ajh/app"
+    "ingest": "npm run ingest -w @ajh/app",
+    "storage:check": "npm run storage:check -w @ajh/app --"
   },
   "devDependencies": {
     "typescript": "^5",

@@ -1,4 +1,4 @@
-import type { FileStorage } from "@ajh/core";
+import type { FileStorage, StoredObject } from "@ajh/core";
 import type { FieldCipher } from "../crypto/field-cipher";
 
 /** Decorator: encrypts file contents before they reach the underlying storage. */
@@ -19,5 +19,10 @@ export class EncryptedFileStorage implements FileStorage {
 
   delete(key: string): Promise<void> {
     return this.inner.delete(key);
+  }
+
+  /** Sizes are what is actually stored (ciphertext), which is what counts against the quota. */
+  list(): AsyncIterable<StoredObject> {
+    return this.inner.list();
   }
 }

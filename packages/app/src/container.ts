@@ -1,4 +1,4 @@
-import { FeedService, IngestionService, ResumeService, SwipeService } from "@ajh/core";
+import { FeedService, GB, IngestionService, ResumeService, StorageQuotaService, SwipeService } from "@ajh/core";
 import { createConnectorRegistry, DEFAULT_JSEARCH_SOURCE, DEFAULT_SOURCES } from "@ajh/connectors";
 import { ClaudeResumeParser } from "@ajh/ai";
 import {
@@ -31,6 +31,8 @@ export function createContainer(config: AppConfig = loadConfig()) {
     cipher,
   );
 
+  const quota = new StorageQuotaService(storage, repos.resumes, { limitBytes: config.STORAGE_LIMIT_GB * GB });
+
   const sources = new DrizzleSourceRepository(db);
   const ingestion = new IngestionService({
     sources,
@@ -47,7 +49,10 @@ export function createContainer(config: AppConfig = loadConfig()) {
       storage,
       extractors: defaultTextExtractors(),
       parser: new ClaudeResumeParser(), // reads ANTHROPIC_API_KEY from the environment
+      quota,
     }),
+    /** Storage cap: usage check and cleanup (also run by the daily cron). */
+    storage: quota,
     /** Refreshes jobs from every enabled source (CLI and scheduled cron). */
     ingestion: {
       async runAll() {

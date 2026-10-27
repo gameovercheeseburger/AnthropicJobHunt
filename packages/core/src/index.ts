@@ -13,4 +13,5 @@ export * from "./ports/resume";
 export * from "./services/feed-service";
 export * from "./services/parsed-resume-verifier";
 export * from "./services/resume-service";
+export * from "./services/storage-quota-service";
 export * from "./services/swipe-service";

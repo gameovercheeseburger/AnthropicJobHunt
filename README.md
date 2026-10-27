@@ -27,6 +27,7 @@ Other commands:
 | `npm run db:migrate` | Apply migrations |
 | `npm run db:studio` | Browse the database |
 | `npm run services:down` | Stop Docker services |
+| `npm run storage:check` | Show file-storage usage vs. the 8 GB cap and run cleanup |
 
 Local services: Postgres on `localhost:5433`, S3 (SeaweedFS) on `localhost:8333`, Mailpit inbox at http://localhost:8025.
 

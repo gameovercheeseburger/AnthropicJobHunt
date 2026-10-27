@@ -111,6 +111,18 @@ export class FakeResumeRepository implements ResumeRepository {
   async findMasterParsed(userId: string) {
     return (await this.findMaster(userId))?.parsed ?? null;
   }
+  async allFileKeys() {
+    return new Set(this.s.resumes.map((r) => r.fileKey));
+  }
+  async listSuperseded() {
+    return this.s.resumes
+      .filter((r) => !r.isMaster)
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+      .map(({ id, fileKey, createdAt }) => ({ id, fileKey, createdAt }));
+  }
+  async delete(id: string) {
+    this.s.resumes = this.s.resumes.filter((r) => r.id !== id);
+  }
   private find(id: string) {
     const r = this.s.resumes.find((x) => x.id === id);
     if (!r) throw new Error(`no resume ${id}`);
@@ -143,8 +155,15 @@ export function fakeRepositories(store: InMemoryStore): Repositories {
 
 export class FakeFileStorage implements FileStorage {
   files = new Map<string, Uint8Array>();
+  modified = new Map<string, Date>();
   async put(key: string, bytes: Uint8Array) {
     this.files.set(key, bytes);
+    this.modified.set(key, new Date(0)); // long ago: past any orphan grace period
+  }
+  async *list() {
+    for (const [key, bytes] of this.files) {
+      yield { key, sizeBytes: bytes.byteLength, lastModified: this.modified.get(key) ?? new Date(0) };
+    }
   }
   async get(key: string) {
     const f = this.files.get(key);

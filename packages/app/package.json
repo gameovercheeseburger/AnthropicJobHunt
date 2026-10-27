@@ -11,7 +11,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "resume:upload": "tsx scripts/upload-resume.ts",
-    "ingest": "tsx scripts/ingest.ts"
+    "ingest": "tsx scripts/ingest.ts",
+    "storage:check": "tsx scripts/storage-check.ts"
   },
   "dependencies": {
     "@ajh/core": "*",

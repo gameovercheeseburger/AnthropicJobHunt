@@ -26,9 +26,14 @@ export interface ResumeServiceDeps {
   storage: FileStorage;
   extractors: TextExtractor[];
   parser: ResumeParser;
+  /** Storage cap (hard stop). Optional so tests and local tools can run without it. */
+  quota?: { ensureRoom(incomingBytes: number): Promise<void> };
   verifier?: ParsedResumeVerifier;
   newId?: () => string;
 }
+
+/** Bytes AES-GCM adds to every stored file (header + IV + auth tag), rounded up. */
+const ENCRYPTION_OVERHEAD_BYTES = 64;
 
 /** Below this, a PDF is probably scanned images; the parser then reads the PDF itself. */
 const MIN_TEXT_CHARS = 200;
@@ -50,6 +55,9 @@ export class ResumeService {
     if (file.bytes.byteLength > MAX_RESUME_BYTES) throw new ValidationError("Resumes must be 5 MB or smaller.");
     const extractor = this.deps.extractors.find((e) => e.supports(file.mimeType));
     if (!extractor) throw new ValidationError("That file type isn't supported yet.");
+
+    // Hard stop: refuses (after cleanup) rather than ever exceeding the storage limit.
+    await this.deps.quota?.ensureRoom(file.bytes.byteLength + ENCRYPTION_OVERHEAD_BYTES);
 
     const fileKey = `resumes/${userId}/${this.newId()}.${ext}`;
     await this.deps.storage.put(fileKey, file.bytes, file.mimeType);

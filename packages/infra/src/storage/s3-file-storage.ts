@@ -3,10 +3,11 @@ import {
   DeleteObjectCommand,
   GetObjectCommand,
   HeadBucketCommand,
+  ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import type { FileStorage } from "@ajh/core";
+import type { FileStorage, StoredObject } from "@ajh/core";
 
 export interface S3Config {
   endpoint?: string;
@@ -45,6 +46,22 @@ export class S3FileStorage implements FileStorage {
 
   async delete(key: string): Promise<void> {
     await this.client.send(new DeleteObjectCommand({ Bucket: this.config.bucket, Key: key }));
+  }
+
+  /** Pages through every object in the bucket (1,000 per request). */
+  async *list(): AsyncIterable<StoredObject> {
+    await this.ensureBucket();
+    let token: string | undefined;
+    do {
+      const page = await this.client.send(
+        new ListObjectsV2Command({ Bucket: this.config.bucket, ContinuationToken: token }),
+      );
+      for (const obj of page.Contents ?? []) {
+        if (!obj.Key) continue;
+        yield { key: obj.Key, sizeBytes: obj.Size ?? 0, lastModified: obj.LastModified ?? new Date(0) };
+      }
+      token = page.IsTruncated ? page.NextContinuationToken : undefined;
+    } while (token);
   }
 
   /** Creates the bucket on first use (local dev); production buckets already exist. */

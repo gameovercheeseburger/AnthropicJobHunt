@@ -1,6 +1,12 @@
-import type { ParsedResume, ResumeRecord, ResumeRepository, VerificationWarning } from "@ajh/core";
+import type {
+  ParsedResume,
+  ResumeRecord,
+  ResumeRepository,
+  SupersededResumeFile,
+  VerificationWarning,
+} from "@ajh/core";
 import type { FieldCipher } from "@ajh/infra";
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import type { Executor } from "../client";
 import { resumes } from "../schema";
 
@@ -65,6 +71,23 @@ export class DrizzleResumeRepository implements ResumeRepository {
       .where(and(eq(resumes.userId, userId), eq(resumes.isMaster, true)))
       .limit(1);
     return row ?? null;
+  }
+
+  async allFileKeys(): Promise<Set<string>> {
+    const rows = await this.db.select({ fileKey: resumes.fileKey }).from(resumes);
+    return new Set(rows.map((r) => r.fileKey));
+  }
+
+  async listSuperseded(): Promise<SupersededResumeFile[]> {
+    return this.db
+      .select({ id: resumes.id, fileKey: resumes.fileKey, createdAt: resumes.createdAt })
+      .from(resumes)
+      .where(eq(resumes.isMaster, false))
+      .orderBy(asc(resumes.createdAt));
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.db.delete(resumes).where(eq(resumes.id, id));
   }
 
   async findMasterParsed(userId: string): Promise<ParsedResume | null> {

@@ -41,6 +41,7 @@ describe("EncryptedFileStorage", () => {
       put: async (k, b) => void raw.set(k, b),
       get: async (k) => raw.get(k)!,
       delete: async (k) => void raw.delete(k),
+      list: async function* () {},
     };
     const storage = new EncryptedFileStorage(inner, cipher);
     const original = new TextEncoder().encode("%PDF resume bytes");
