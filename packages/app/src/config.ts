@@ -1,7 +1,8 @@
+import { resolveDatabaseUrls } from "@ajh/db";
 import { z } from "zod";
 
 const EnvSchema = z.object({
-  DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+  DATABASE_URL: z.string().min(1, "DATABASE_URL (or POSTGRES_URL) is required"),
   DATA_ENCRYPTION_KEY: z.string().min(1, "DATA_ENCRYPTION_KEY is required (see .env.example)"),
   S3_ENDPOINT: z.string().optional().transform((v) => v || undefined),
   S3_REGION: z.string().default("us-east-1"),
@@ -18,7 +19,8 @@ export type AppConfig = z.infer<typeof EnvSchema>;
 
 /** Validates environment variables once, with readable errors. Secrets come only from the environment. */
 export function loadConfig(env: Record<string, string | undefined> = process.env): AppConfig {
-  const result = EnvSchema.safeParse(env);
+  // Accept the database URL under the integration's names too (POSTGRES_URL, ...).
+  const result = EnvSchema.safeParse({ ...env, DATABASE_URL: resolveDatabaseUrls(env).pooled ?? undefined });
   if (!result.success) {
     const problems = result.error.issues.map((i) => `  - ${i.path.join(".")}: ${i.message}`).join("\n");
     throw new Error(`Invalid configuration. Check the .env file at the repo root:\n${problems}`);

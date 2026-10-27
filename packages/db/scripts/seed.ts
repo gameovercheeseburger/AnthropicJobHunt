@@ -3,6 +3,7 @@
 import { config } from "dotenv";
 import { eq, inArray } from "drizzle-orm";
 import { createDatabase } from "../src/client";
+import { resolveDatabaseUrls } from "../src/env";
 import { jobListings, jobs, sources, users } from "../src/schema";
 
 // ENV_FILE lets the same script target production, e.g. ENV_FILE=../../.env.production.local
@@ -10,7 +11,7 @@ config({ path: process.env.ENV_FILE ?? "../../.env" });
 
 export const OWNER_USER_ID = "dev-user";
 
-const db = createDatabase(process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL!);
+const db = createDatabase(resolveDatabaseUrls().direct!);
 
 await db
   .insert(users)
